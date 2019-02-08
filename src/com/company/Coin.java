@@ -1,14 +1,14 @@
 package com.company;
 
 public enum Coin {
-    NICKEL(0.05),
-    DIME(0.10),
-    QUARTER(0.25),
-    DOLLAR(1.00);
+    NICKEL(5),
+    DIME(10),
+    QUARTER(25),
+    DOLLAR(100);
 
-    public double value;
+    public int value;
 
-    Coin(double value) {
+    Coin(int value) {
        this.value = value;
     }
 

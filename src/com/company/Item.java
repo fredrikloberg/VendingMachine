@@ -1,7 +1,14 @@
 package com.company;
 
-public interface Item {
+public enum Item {
+    COLA("COLA", 150),
+    SOLO("SOLO", 350);
 
-    String getId();
-    double getPrice();
+    public final String id;
+    public final int price;
+
+    Item(String id, int price) {
+        this.id = id;
+        this.price = price;
+    }
 }

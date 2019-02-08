@@ -1,38 +1,47 @@
 package com.company;
 
+import com.company.VendingMachine.Model;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 
 public class VendingMachineTest {
 
     @Test
-    public void testWithoutEnoughMoney() {
-        InsertedMoney insertedMoney = new InsertedMoney();
+    public void testWithNoStock() {
+        Model model = new Model(Collections.emptyList(), Arrays.asList(), "");
 
-        List<Coin> coins = ChangeCalculator.calculateChange(insertedMoney, new Cola());
+        Model newModel = VendingMachine.update(model, "GET-cola");
 
-        assertEquals(0, getSum(coins), 0.000001);
+        assertEquals(VendingMachine.SOLD_OUT, newModel.output);
     }
 
     @Test
-    public void testWithTooMuchMoney() {
-        InsertedMoney insertedMoney = new InsertedMoney();
-        insertedMoney.add(Coin.DOLLAR);
-        insertedMoney.add(Coin.DOLLAR);
+    public void testWithoutEnoughMoney() {
+        Model model = new Model(Collections.emptyList(), Arrays.asList(Item.COLA, Item.SOLO), "");
 
-        List<Coin> coins = ChangeCalculator.calculateChange(insertedMoney, new Cola());
+        Model newModel = VendingMachine.update(model, "GET-cola");
 
-        assertEquals(2, coins.size());
-        assertEquals(Coin.QUARTER, coins.get(0));
-        assertEquals(Coin.QUARTER, coins.get(1));
+        assertEquals(VendingMachine.NOT_ENOUGH_MONEY, newModel.output);
     }
 
+    @Test
+    public void testBuyCola() {
+        Model model = new Model(Collections.emptyList(), Arrays.asList(Item.COLA, Item.SOLO), "");
 
-    public double getSum(List<Coin> coins) {
-        return coins.stream().map(c-> c.value).reduce((a, i) -> a + i).orElse(0.0);
+        model = VendingMachine.update(model, "Q");
+        model = VendingMachine.update(model, "Q");
+        model = VendingMachine.update(model, "Q");
+        model = VendingMachine.update(model, "Q");
+        model = VendingMachine.update(model, "Q");
+        model = VendingMachine.update(model, "Q");
+        model = VendingMachine.update(model, "Q");
+        model = VendingMachine.update(model, "GET-COLA");
+
+        assertEquals(Item.COLA.id + ", " + Coin.QUARTER.toString(), model.output);
     }
 
 }
